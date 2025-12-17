@@ -1,0 +1,5 @@
+{
+  "name": "Gió đông soccer",
+  "description": "Ứng dụng mô phỏng chiến thuật Futsal (Sân 5), tập trung vào kỹ thuật Block người và chạy cắt mặt trong các tình huống phạt góc. Hiển thị đầy đủ đội hình 2 đội.",
+  "requestFramePermissions": []
+}
