@@ -861,8 +861,8 @@ const App: React.FC = () => {
     const startersA = teamA.players.filter(p => p.isStarter).slice(0, 5);
     const startersB = teamB.players.filter(p => p.isStarter).slice(0, 5);
     
-    // Logic: Use nickname if available, else last name
-    const fmt = (p?: PlayerInfo) => p ? `${p.number} ${p.nickname || p.name.split(' ').pop()}` : '???';
+    // Logic: Only show jersey number on tactical board
+    const fmt = (p?: PlayerInfo) => p ? `${p.number}` : '???';
     const fmtInstr = (p?: PlayerInfo) => p ? p.position : '';
 
     return {
