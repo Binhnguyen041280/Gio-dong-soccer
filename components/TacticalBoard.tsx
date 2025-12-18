@@ -38,7 +38,7 @@ const TacticalBoard: React.FC<TacticalBoardProps> = ({
   onScenarioUpdate
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number>(0);
   
   // State
   const [activeStepIndex, setActiveStepIndex] = useState(0);
@@ -207,24 +207,43 @@ const TacticalBoard: React.FC<TacticalBoardProps> = ({
             ctx.beginPath(); ctx.ellipse(0, 6, 7, 2.5, 0, 0, Math.PI*2); 
             ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.fill();
 
-            ctx.beginPath(); ctx.arc(0, 0, 8, 0, Math.PI*2);
+            // Player Circle
+            ctx.beginPath(); ctx.arc(0, 0, 9, 0, Math.PI*2);
             ctx.fillStyle = color; ctx.fill();
             ctx.strokeStyle = "#fff"; ctx.lineWidth = 1.5; ctx.stroke();
             
             const info = getEntityInfo(ent);
             
-            // Name Label
+            // Logic to show ONLY number inside circle
+            // info.label usually looks like "10 Tri Hi" or "P1"
+            let textToDraw = info.label;
+            const numberMatch = info.label.match(/^(\d+)/);
+            if (numberMatch) {
+                textToDraw = numberMatch[1];
+            } else {
+                // If it's a code like "P1", "GK", use it. If "???" use "?"
+                if (textToDraw === "???") textToDraw = "?";
+                // Shorten if too long (though P1, GK fit fine)
+                if (textToDraw.length > 2) textToDraw = textToDraw.substring(0,2);
+            }
+
+            // Draw Number INSIDE the circle
             ctx.fillStyle = "#fff"; 
             ctx.font = "bold 10px sans-serif"; 
             ctx.textAlign = "center";
-            ctx.fillText(info.label, 0, -12);
+            ctx.textBaseline = "middle";
+            ctx.fillText(textToDraw, 0, 1);
 
-            // Position Sub-label (optional, small below)
+            // Position Sub-label (optional, small below - keep for instruction context e.g. "ALA")
+            // Can comment out if you want strictly NO text outside
+            /*
             if (info.sub && !isPreview) {
                 ctx.fillStyle = "rgba(255,255,255,0.7)";
                 ctx.font = "8px sans-serif";
+                ctx.textBaseline = "alphabetic";
                 ctx.fillText(info.sub, 0, 20);
             }
+            */
         }
         ctx.restore();
     });
